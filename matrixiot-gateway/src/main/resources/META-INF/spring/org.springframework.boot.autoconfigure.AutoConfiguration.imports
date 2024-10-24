@@ -1,0 +1,2 @@
+com.victorlamp.matrixiot.service.gateway.security.config.SecurityAutoConfiguration
+com.victorlamp.matrixiot.service.gateway.security.config.ResourceServerConfiguration

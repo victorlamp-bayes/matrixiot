@@ -1,0 +1,62 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+version("1.0.0")
+
+build {
+    copy {
+        from("src/boot.conf")
+        into("build/libs/")
+        rename { String fileName ->
+            fileName = "${archivesBaseName}-${version}.conf"
+        }
+    }
+}
+
+bootRun {
+    jvmArgs(["--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.math=ALL-UNNAMED"])
+}
+
+bootJar {
+    launchScript {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-jersey'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation 'com.novemberain:quartz-mongodb:2.2.0-rc2'
+
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+    implementation 'org.apache.rocketmq:rocketmq-spring-boot-starter'
+
+    implementation 'org.graalvm.js:js:21.3.7'
+    implementation 'org.graalvm.js:js-scriptengine:21.3.7'
+    implementation "cn.hutool:hutool-all"
+
+    implementation "org.springdoc:springdoc-openapi-ui"
+
+    implementation project(":matrixiot-common")
+    implementation project(":matrixiot-service-api")
+    implementation project(":matrixiot-configuration")
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.mapstruct:mapstruct'
+    annotationProcessor 'org.mapstruct:mapstruct-processor'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}

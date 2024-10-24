@@ -1,0 +1,64 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+version("1.0.0")
+
+build {
+    copy {
+        from("src/boot.conf")
+        into("build/libs/")
+        rename { String fileName ->
+            fileName = "${archivesBaseName}-${version}.conf"
+        }
+    }
+}
+
+bootRun {
+    jvmArgs(["--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.math=ALL-UNNAMED"])
+}
+
+bootJar {
+    launchScript {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "org.springframework.boot:spring-boot-configuration-processor"
+    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+
+    implementation "com.alibaba.fastjson2:fastjson2"
+    implementation "com.google.guava:guava"
+    implementation "cn.hutool:hutool-all"
+
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.86.Final:osx-aarch_64'
+
+    implementation project(":matrixiot-common")
+    implementation project(":matrixiot-service-api")
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation 'org.mapstruct:mapstruct'
+    annotationProcessor 'org.mapstruct:mapstruct-processor'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+compileJava {
+    options.compilerArgs << "-Amapstruct.unmappedTargetPolicy=IGNORE"
+}

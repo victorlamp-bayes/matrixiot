@@ -1,0 +1,99 @@
+server:
+  port: 10081
+
+spring:
+  application:
+    name: matrixiot-service-core
+  main:
+    allow-circular-references: true
+  #    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      enabled: true
+      location: /data/matrixiot/upload_tmp
+      max-file-size: 10MB   #设置单个上传的文件大小
+      max-request-size: 10MB  #设置单次请求的文件的总大小
+  cloud:
+    nacos:
+      config:
+        username: nacos
+        password: nacos.matrixiot-2
+        contextPath: /nacos
+        server-addr: matrixiot-secondary-2:8848
+        group: spring
+      discovery:
+        username: nacos
+        password: nacos.matrixiot-2
+        server-addr: matrixiot-secondary-2:8848
+        namespace: ${spring.profiles.active}
+        group: spring
+  data:
+    mongodb:
+      uri: mongodb://matrixiot:matrixiot_net888!@matrixiot-1:27017,matrixiot-2:27017/matrixiot?authSource=admin&authMechanism=SCRAM-SHA-1&replicaSet=matrixiot-rs
+      auto-index-creation: true
+  config:
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.yaml
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+management:
+  endpoints:
+    web.exposure.include: prometheus
+    enabled-by-default: true
+  endpoint:
+    metrics.enabled: true
+    prometheus.enabled: true
+  metrics:
+    tags.application: ${spring.application.name}
+    export.prometheus.enabled: true
+
+dubbo:
+  application:
+    name: matrixiot-service-core-dubbo
+    register-mode: instance
+    qos-enable: false
+  registry:
+    address: nacos://matrixiot-secondary-2:8848?namespace=${spring.profiles.active}
+    username: nacos
+    password: nacos.matrixiot-2
+    group: dubbo
+  config-center:
+    address: nacos://matrixiot-secondary-2:8848?namespace=${spring.profiles.active}
+    username: nacos
+    password: nacos.matrixiot-2
+  consumer:
+    check: false
+  protocol:
+    name: dubbo
+    serialization: hessian2
+    port: -1
+    server: netty4
+  scan:
+    base-packages: com.victorlamp.matrixiot.service
+
+rocketmq:
+  consumer:
+    group: springboot_consumer_group
+    # 一次拉取消息最大值，注意是拉取消息的最大值而非消费最大值
+    pull-batch-size: 10
+  name-server: matrixiot-1:9876;matrixiot-2:9876;matrixiot-secondary-1:9876
+  producer:
+    # 发送同一类消息的设置为同一个group，保证唯一
+    group: springboot_producer_group
+    # 发送消息超时时间，默认3000
+    sendMessageTimeout: 10000
+    # 发送消息失败重试次数，默认2
+    retryTimesWhenSendFailed: 2
+    # 异步消息重试此处，默认2
+    retryTimesWhenSendAsyncFailed: 2
+    # 消息最大长度，默认1024 * 1024 * 4(默认4M)
+    maxMessageSize: 4096
+    # 压缩消息阈值，默认4k(1024 * 4)
+    compressMessageBodyThreshold: 4096
+    # 是否在内部发送失败时重试另一个broker，默认false
+    retryNextServer: false
+
+logging:
+  file:
+    name: /data/matrixiot/logs/${spring.application.name}.log

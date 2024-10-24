@@ -1,0 +1,10 @@
+com.victorlamp.matrixiot.service.framework.apilog.config.ApiLogAutoConfiguration
+com.victorlamp.matrixiot.service.framework.jackson.config.JacksonAutoConfiguration
+com.victorlamp.matrixiot.service.framework.web.config.WebAutoConfiguration
+com.victorlamp.matrixiot.service.framework.mybatis.config.MybatisAutoConfiguration
+com.victorlamp.matrixiot.service.framework.redis.config.CacheAutoConfiguration
+com.victorlamp.matrixiot.service.framework.redis.config.RedisAutoConfiguration
+com.victorlamp.matrixiot.service.framework.security.config.WebSecurityConfiguration
+com.victorlamp.matrixiot.service.framework.tenant.config.TenantAutoConfiguration
+com.victorlamp.matrixiot.service.framework.captcha.config.CaptchaAutoConfiguration
+com.victorlamp.matrixiot.service.system.framework.sms.SmsCodeConfiguration

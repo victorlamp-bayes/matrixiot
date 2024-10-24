@@ -1,0 +1,136 @@
+server:
+  port: 8100
+
+spring:
+  application:
+    name: matrixiot-gateway
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  cloud:
+    nacos:
+      config:
+        username: nacos
+        password: nacos.matrixiot-2
+        contextPath: /nacos
+        server-addr: matrixiot-secondary-2:8848
+        group: spring
+      discovery:
+        username: nacos
+        password: nacos.matrixiot-2
+        server-addr: matrixiot-secondary-2:8848
+        namespace: ${spring.profiles.active}
+        group: spring
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: matrixiot-system
+          uri: lb://matrixiot-service-system
+          predicates:
+            - Path=/api/v1/system/**
+
+        - id: matrixiot-management
+          uri: lb://matrixiot-service-core
+          predicates:
+            - Path=/api/v1/iot/thing/**,/api/v1/iot/product/**,/api/v1/iot/thing-model/**,/api/v1/iot/thing-data/**,/api/v1/iot/area/**
+
+        - id: matrixiot-agent
+          uri: lb://matrixiot-service-agent
+          predicates:
+            - Path=/api/v1/iot/agent/**
+
+        - id: matrixiot-alarm
+          uri: lb://matrixiot-service-alarm
+          predicates:
+            - Path=/api/v1/iot/alarm/**
+
+        - id: matrixiot-metric
+          uri: lb://matrixiot-service-metric
+          predicates:
+            - Path=/api/v1/iot/metric/**,/api/v1/iot/metric-data/**
+
+        - id: matrixiot-route
+          uri: lb://matrixiot-service-route
+          predicates:
+            - Path=/api/v1/iot/data-route/**
+
+        - id: matrixiot-rule
+          uri: lb://matrixiot-service-rule
+          predicates:
+            - Path=/api/v1/iot/rule/**
+  config:
+    import: optional:nacos:${spring.application.name}-${spring.profiles.active}.yaml
+
+rocketmq:
+  consumer:
+    group: springboot_consumer_group
+    # 一次拉取消息最大值，注意是拉取消息的最大值而非消费最大值
+    pull-batch-size: 10
+  name-server: matrixiot-1:9876;matrixiot-2:9876;matrixiot-secondary-1:9876
+  producer:
+    # 发送同一类消息的设置为同一个group，保证唯一
+    group: springboot_producer_group
+    # 发送消息超时时间，默认3000
+    sendMessageTimeout: 10000
+    # 发送消息失败重试次数，默认2
+    retryTimesWhenSendFailed: 2
+    # 异步消息重试此处，默认2
+    retryTimesWhenSendAsyncFailed: 2
+    # 消息最大长度，默认1024 * 1024 * 4(默认4M)
+    maxMessageSize: 4096
+    # 压缩消息阈值，默认4k(1024 * 4)
+    compressMessageBodyThreshold: 4096
+    # 是否在内部发送失败时重试另一个broker，默认false
+    retryNextServer: false
+
+matrixiot:
+  security:
+    permit-all-urls:
+      - /api/v1/system/dict-data/list-all-simple
+      - /api/v1/system/tenant/get-id-by-name
+      - /api/v1/system/tenant/describe-by-website
+      - /api/v1/system/auth/send-sms-code
+      - /api/v1/system/captcha/**
+      - /api/v1/system/auth/login
+      - /api/v1/system/auth/refresh-token
+      - /api/v1/system/auth/sms-login
+      - /api/v1/system/oauth2/grafana/token
+      - /api/v1/iot/agent/third-device/post
+    ignore-permission-urls:
+      - /api/v1/system/auth/get-permission-info
+      - /api/v1/system/**/list-all-simple
+      - /api/v1/system/auth/logout
+      - /api/v1/system/oauth2/grafana/**
+      - /api/v1/iot/**
+      - /api/v1/system/user/profile/**
+
+dubbo:
+  application:
+    name: matrixiot-gateway-dubbo
+    register-mode: instance
+    qos-enable: false
+  registry:
+    address: nacos://matrixiot-secondary-2:8848?namespace=${spring.profiles.active}
+    username: nacos
+    password: nacos
+    group: dubbo
+  config-center:
+    address: nacos://matrixiot-secondary-2:8848?namespace=${spring.profiles.active}
+    username: nacos
+    password: nacos
+  consumer:
+    check: false
+  protocol:
+    name: dubbo
+    serialization: hessian2
+    port: -1
+    server: netty4
+  scan:
+    base-packages: com.victorlamp.matrixiot.service
+
+logging:
+  file:
+    name: /data/matrixiot/logs/${spring.application.name}.log

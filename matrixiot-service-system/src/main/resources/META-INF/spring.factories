@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.victorlamp.matrixiot.service.framework.mybatis.config.IdTypeEnvironmentPostProcessor

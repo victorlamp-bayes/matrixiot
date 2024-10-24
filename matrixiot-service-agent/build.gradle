@@ -1,0 +1,74 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+version("1.0.0")
+
+build {
+    copy {
+        from("src/boot.conf")
+        into("build/libs/")
+        rename { String fileName ->
+            fileName = "${archivesBaseName}-${version}.conf"
+        }
+    }
+}
+
+bootRun {
+    jvmArgs(["--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.math=ALL-UNNAMED"])
+}
+
+bootJar {
+    launchScript {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+    implementation 'org.apache.rocketmq:rocketmq-spring-boot-starter'
+
+    implementation "org.springdoc:springdoc-openapi-ui"
+
+    implementation "cn.hutool:hutool-all"
+
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+
+    implementation 'org.graalvm.js:js'
+    implementation 'org.graalvm.js:js-scriptengine'
+    implementation 'org.codehaus.groovy:groovy-all'
+    implementation 'commons-codec:commons-codec:1.16.0'
+    implementation 'org.bouncycastle:bcprov-jdk18on'
+
+    implementation 'org.apache.httpcomponents:httpmime:4.5.10'
+    implementation 'io.netty:netty-all'
+
+    implementation 'org.springframework.integration:spring-integration-mqtt'
+
+    implementation 'com.baomidou:mybatis-plus-boot-starter'
+    implementation 'com.baomidou:dynamic-datasource-spring-boot-starter'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:11.2.3.jre17'
+
+    implementation files("lib/ag-sdk-biz-34878.tar.gz-20200629.134004-SNAPSHOT.jar")
+    implementation files("lib/ctg-ag-sdk-core-2.5.0-20200430.073030-18.jar")
+
+    implementation project(":matrixiot-common")
+    implementation project(":matrixiot-configuration")
+    implementation project(":matrixiot-service-api")
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}

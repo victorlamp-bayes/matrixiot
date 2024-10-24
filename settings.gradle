@@ -1,0 +1,25 @@
+rootProject.name = 'matrixiot-server'
+
+include 'matrixiot-common'
+include 'matrixiot-configuration'
+include 'matrixiot-service-api'
+include 'matrixiot-service-core'
+include 'matrixiot-service-agent'
+include 'matrixiot-service-rule'
+include 'matrixiot-service-alarm'
+include 'matrixiot-service-route'
+include 'matrixiot-service-metric'
+include 'matrixiot-service-system'
+include 'matrixiot-gateway'
+
+project(':matrixiot-common').projectDir = "${rootDir}/matrixiot-common" as File
+project(':matrixiot-configuration').projectDir = "${rootDir}/matrixiot-configuration" as File
+project(':matrixiot-service-api').projectDir = "${rootDir}/matrixiot-service-api" as File
+project(':matrixiot-service-core').projectDir = "${rootDir}/matrixiot-service-core" as File
+project(':matrixiot-service-agent').projectDir = "${rootDir}/matrixiot-service-agent" as File
+project(':matrixiot-service-rule').projectDir = "${rootDir}/matrixiot-service-rule" as File
+project(':matrixiot-service-alarm').projectDir = "${rootDir}/matrixiot-service-alarm" as File
+project(':matrixiot-service-route').projectDir = "${rootDir}/matrixiot-service-route" as File
+project(':matrixiot-service-metric').projectDir = "${rootDir}/matrixiot-service-metric" as File
+project(':matrixiot-service-system').projectDir = "${rootDir}/matrixiot-service-system" as File
+project(':matrixiot-gateway').projectDir = "${rootDir}/matrixiot-gateway" as File

@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "csq": {
+      "type": "integer"
+    },
+    "funcCode": {
+      "type": "string"
+    },
+    "msgId": {
+      "type": "integer"
+    },
+    "rsrp": {
+      "type": "integer"
+    },
+    "battery": {
+      "type": "integer"
+    },
+    "ecl": {
+      "type": "integer"
+    },
+    "receiveTime": {
+      "type": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "no": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "negativeValue": {
+                "type": "integer"
+              },
+              "addr": {
+                "type": "string"
+              },
+              "type": {
+                "type": "integer"
+              },
+              "deviceId": {
+                "type": "string"
+              },
+              "positiveValue": {
+                "type": "number"
+              },
+              "value": {
+                "type": "number"
+              },
+              "ts": {
+                "type": "date-time"
+              }
+            },
+            "required": [
+              "addr",
+              "deviceId",
+              "value",
+              "ts"
+            ]
+          }
+        },
+        "dataType": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "snr": {
+      "type": "integer"
+    },
+    "gatewayId": {
+      "type": "string"
+    },
+    "ts": {
+      "type": "date-time"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "desc": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "battery",
+    "payload",
+    "gatewayId",
+    "ts"
+  ]
+}
