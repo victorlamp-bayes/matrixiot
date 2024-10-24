@@ -12,4 +12,5 @@
 
 ### 基础服务
 1. 安装 Docker Engine
-2. 运行 startup.sh，启动基础服务。必选服务：MySQL、MongoDB、Redis、Nacos、RocketMQ，可选服务：Prometheus、Grafana
+2. 运行 startup.sh，启动基础服务。必选服务：MySQL、MongoDB、Redis、Nacos、RocketMQ，可选服务：Prometheus、Grafana。
+3. 依次运行服务：matrixiot-gateway, matrixiot-service-system, matrix-service-core。
