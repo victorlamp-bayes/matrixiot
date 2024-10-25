@@ -1,6 +1,7 @@
-<p align="center">
- <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-blue.svg" alt="Downloads">
+<p style="text-align: center">
+  <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
+  <img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-blue.svg" alt="Downloads">
+  <img src="https://img.shields.io/github/license/victorlamp-bayes/matrixiot-server" alt="Downloads">
 </p>
 
 # 项目介绍
