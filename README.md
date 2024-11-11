@@ -59,7 +59,7 @@
 
 Username： admin
 
-Password： hviot123!@#
+Password： admin
 
 ![1730945674821](.image/user-doc/登录1.png)
 
