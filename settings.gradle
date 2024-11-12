@@ -11,6 +11,7 @@ include 'matrixiot-service-route'
 include 'matrixiot-service-metric'
 include 'matrixiot-service-system'
 include 'matrixiot-gateway'
+include 'matrixiot-server'
 
 project(':matrixiot-common').projectDir = "${rootDir}/matrixiot-common" as File
 project(':matrixiot-configuration').projectDir = "${rootDir}/matrixiot-configuration" as File
@@ -23,3 +24,4 @@ project(':matrixiot-service-route').projectDir = "${rootDir}/matrixiot-service-r
 project(':matrixiot-service-metric').projectDir = "${rootDir}/matrixiot-service-metric" as File
 project(':matrixiot-service-system').projectDir = "${rootDir}/matrixiot-service-system" as File
 project(':matrixiot-gateway').projectDir = "${rootDir}/matrixiot-gateway" as File
+project(':matrixiot-server').projectDir = "${rootDir}/matrixiot-server" as File

@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/github/license/victorlamp-bayes/matrixiot-server" alt="Downloads">
 </p>
 
-## 项目简介
+# 项目简介
 **矩阵IoT（MatrixIoT）**，做中国人共享共用的IoT软件平台，服务千行百业！个人与企业可 100% 免费使用。
 
 - 融合AI大模型与IoT物联网技术，通过行业标准的物联网协议实现万物互联。
@@ -24,7 +24,7 @@
 * 消息队列默认使用 RocketMQ
 * 权限认证使用 Spring Security & Token & Redis，支持多终端、多种用户的认证系统，支持 SSO 单点登录
 
-## 开源协议
+# 开源协议
 
 ① 本项目采用最宽松的 [MIT License](https://gitee.com/victorlamp/matrixiot-server/blob/master/LICENSE) 开源协议，个人与企业可 100% 免费使用，不用保留类作者、Copyright 信息。
 
@@ -32,24 +32,41 @@
 
 [更多信息](https://victorlamp.com/products/iot)
 
-# 参考文档
+# 快速开始
 
-## 运行环境
+## 后端项目
 
-### 基础服务
-1. 安装 Docker Engine
-2. 运行 startup.sh，启动基础服务。必选服务：MySQL、MongoDB、Redis、Nacos、RocketMQ，可选服务：Prometheus、Grafana。
-3. 依次运行服务：matrixiot-gateway, matrixiot-service-system, matrix-service-core。
+[matrixiot-server](https://gitee.com/victorlamp/matrixiot-server)
 
-# 文档持续完善中...
+### 安装基础服务
 
-------
+1. 下载代码。`git clone git@gitee.com:victorlamp/matrixiot-server.git`
+2. 安装 Docker Engine
+3. 运行基础服务
+   1. 配置RocketMQ。在配置文件 `matrixiot-base/matrixiot-rocketmq/conf/broker.conf` 中，将 `brokerIP1` 配置为本机IP地址。
+   2. 运行 `startup.sh`，启动基础服务。必选服务：MySQL、MongoDB、Redis、Nacos、RocketMQ，可选服务：Prometheus、Grafana。
+4. 初始化数据库
+   1. 安装mysql命令行
+   2. 连接数据库 `mysql -uroot -proot -h127.0.0.1 -P33306`
+   3. 初始化数据库 `mysql> source matrixiot-server/matrixiot-service-system/sql/matrixiot_system_init.sql`
+5. 安装 `IntelliJ IDEA`，打开本项目 `matrixiot-server`，将自动导入Gradle配置，等待导入完成。
+6. 运行服务：matrixiot-service-system, matrix-service-core，matrixiot-gateway
+
+## 前端项目
+
+[matrixiot-ui-web](https://gitee.com/victorlamp/matrixiot-ui-web)
+
+1. 下载安装 `Node.js 18(LTS)`
+2. 安装 `pnpm`。`npm install -g pnpm`
+3. 下载代码。`git clone git@gitee.com:victorlamp/matrixiot-ui-web.git`
+4. 安装`VS Code`，打开本项目`matrixiot-ui-web`，在代码根目录执行 `npm run dev`
+5. 在浏览器中打开 http://localhost:8080，即可进入登录页面。
+
+### 文档持续开放中...
 
 ------
 
 # 用户手册
-
-## 目录
 
 ### 第1章  登录
 
@@ -59,7 +76,7 @@
 
 Username： admin
 
-Password： admin
+Password： admin123
 
 ![1730945674821](.image/user-doc/登录1.png)
 

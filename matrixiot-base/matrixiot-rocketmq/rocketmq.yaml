@@ -1,0 +1,82 @@
+services:
+  #Service for nameserver
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.1.3
+    container_name: rocketmq-namesrv
+    ports:
+      - "9876:9876"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - matrixiot_dev_net
+    volumes:
+      - ./data/namesrv/logs:/home/rocketmq/logs
+    command: sh mqnamesrv
+
+  #Service for broker
+  rocketmq-broker:
+    image: apache/rocketmq:5.1.3
+    container_name: rocketmq-broker
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    networks:
+      - matrixiot_dev_net
+    environment:
+      - NAMESRV_ADDR=rocketmq-namesrv:9876
+      - TZ=Asia/Shanghai
+      - JAVA_OPT_EXT=-Xms512m -Xmx1g -Xmn768m
+    volumes:
+      - ./data/broker/logs:/home/rocketmq/logs
+      - ./data/broker/store:/home/rocketmq/store
+      - ./conf/broker.conf:/opt/rocketmq-5.1.3/conf/broker.conf
+    command: sh mqbroker -c /opt/rocketmq-5.1.3/conf/broker.conf
+  #Service for another broker -- broker1
+  #  broker1:
+  #    image: apache/rocketmq:5.1.3
+  #    container_name: rmqbroker-b
+  #    ports:
+  #      - 10929:10909
+  #      - 10931:10911
+  #      - 10932:10912
+  #    network_mode: "host"
+  #    environment:
+  #      - NAMESRV_ADDR=namesrv:9876
+  #      - TZ=Asia/Shanghai
+  #    volumes:
+  #      - ./data1/broker/logs:/home/rocketmq/logs
+  #      - ./data1/broker/store:/home/rocketmq/store
+  #      - ./data1/broker/conf/broker.conf:/opt/rocketmq-5.1.3/conf/broker.conf
+  #    command: sh mqbroker -c /opt/rocketmq-5.1.3/conf/broker.conf
+
+#  rocketmq-dashboard:
+#    image: apacherocketmq/rocketmq-dashboard:latest
+#    container_name: rocketmq-dashboard
+#    ports:
+#      - "18080:8080"
+#    #      - "11011:11011"
+#    networks:
+#      - matrixiot_dev_net
+#    environment:
+#      - JAVA_OPTS=-Drocketmq.namesrv.addr=rocketmq-namesrv:9876
+#      - TZ=Asia/Shanghai
+
+#  rocketmq-exporter:
+#    container_name: rocketmq-exporter
+#    build:
+#      context: ./exporter
+#      dockerfile: Dockerfile
+#    image: matrixiot/rocketmq-exporter:latest
+#    environment:
+#      - rocketmq.config.namesrvAddr=rocketmq-namesrv:9876
+#      - TZ=Asia/Shanghai
+#    ports:
+#      - "5557:5557"
+#    networks:
+#      - matrixiot_dev_net
+#    restart: always
+
+networks:
+  matrixiot_dev_net:
+    external: true

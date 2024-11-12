@@ -1,0 +1,118 @@
+services:
+  #主节点
+  mongo1:
+    image: mongo
+    container_name: mongo1
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      TZ: Asia/Shanghai
+    command: mongod --port 27017 --auth --replSet rs0 --bind_ip_all --keyFile /mongodb.key
+    volumes:
+      - ./mongo1/data:/data/db
+      - ./keyfile:/mongodb.key
+    networks:
+      - matrixiot_dev_net
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  # 副节点
+  mongo2:
+    image: mongo
+    container_name: mongo2
+    restart: always
+    ports:
+      - 27018:27018
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      TZ: Asia/Shanghai
+    command: mongod --port 27018 --auth --replSet rs0 --bind_ip_all --keyFile /mongodb.key
+    volumes:
+      - ./mongo2/data:/data/db
+      - ./keyfile:/mongodb.key
+    networks:
+      - matrixiot_dev_net
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  # 副节点
+  mongo3:
+    image: mongo
+    container_name: mongo3
+    restart: always
+    ports:
+      - 27019:27019
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      TZ: Asia/Shanghai
+    command: mongod --port 27019 --auth --replSet rs0 --bind_ip_all --keyFile /mongodb.key
+    volumes:
+      - ./mongo3/data:/data/db
+      - ./keyfile:/mongodb.key
+    networks:
+      - matrixiot_dev_net
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /mongodb.key
+        chown 999:999 /mongodb.key
+        exec docker-entrypoint.sh $$@
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  mongo-setup:
+    image: mongo
+    container_name: mongo-setup
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - matrixiot_dev_net
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - ./mongodb_rs_init.sh:/scripts/mongodb_rs_init.sh
+    restart: on-failure
+    entrypoint: [ "/bin/bash", "/scripts/mongodb_rs_init.sh" ]
+
+#  mongo-express:
+#    container_name: mongo-express
+#    image: mongo-express
+#    networks:
+#      - matrixiot_dev_net
+#    restart: always
+#    ports:
+#      - 8081:8081
+#    environment:
+#      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+#      - ME_CONFIG_MONGODB_ADMINPASSWORD=example
+#      - ME_CONFIG_MONGODB_URL=mongodb://root:example@mongo1:27017/
+
+networks:
+  matrixiot_dev_net:
+    external: true

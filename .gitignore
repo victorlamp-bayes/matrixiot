@@ -1,6 +1,5 @@
 **/generated/**
 logs/
-matrixiot-base/
 
 ### rule ###
 *.drl

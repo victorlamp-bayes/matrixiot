@@ -1,6 +1,6 @@
 ./shutdown.sh
 
-docker network create --driver bridge --subnet 172.20.0.0/16 --gateway 172.20.0.1 matrixiot_net
+docker network create --driver bridge --subnet 172.20.0.0/16 --gateway 172.20.0.1 matrixiot_dev_net
 
 docker compose -f matrixiot-base/matrixiot-mysql/mysql.yaml -p matrixiot up -d
 docker compose -f matrixiot-base/matrixiot-mongo/mongo.yaml -p matrixiot up -d

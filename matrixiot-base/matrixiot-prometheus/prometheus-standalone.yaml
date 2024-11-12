@@ -1,0 +1,19 @@
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    environment:
+      - COMPOSE_PROJECT_NAME=matrixiot
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/prometheus-standalone.yaml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - matrixiot_dev_net
+    restart: on-failure
+networks:
+  matrixiot_dev_net:
+    external: true
+

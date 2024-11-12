@@ -1,0 +1,30 @@
+services:
+  mysql:
+    container_name: mysql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: matrixiot/mysql:latest
+    env_file:
+      - ./env/mysql.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/conf/my.cnf:/etc/my.cnf
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "33306:3306"
+    networks:
+      - matrixiot_dev_net
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+networks:
+  matrixiot_dev_net:
+    external: true
